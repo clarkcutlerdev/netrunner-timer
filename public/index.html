@@ -12,8 +12,35 @@
 
     #countdown {
       font-weight: 800;
+      font-size: 200px;
+      line-height: 1em;
+    }
+
+    #players .player {
+      float: left;
+      box-sizing: border-box;
+      width: 50%;
+      text-align: center;
+      padding: 20px;
       font-size: 100px;
-      margin-bottom: 50px;
+      color: #ccc;
+    }
+
+    #players .active {
+      border: 1px solid #357ebd;
+      background-color: #428bca;
+      color: white;
+    }
+
+    .actions {
+      clear: both;
+      margin-top: 20px;
+      margin-bottom: 100px;
+    }
+
+    .actions .btn {
+      font-size: 25px;
+      width: 6em;
     }
   </style>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
@@ -25,9 +52,17 @@
 
       $scope.timeLeft = 32.5 * 60
       $scope.isPaused = true
+      $scope.player = 1
+      $scope.player1Time = 0
+      $scope.player2Time = 0
       // see http://jsfiddle.net/ganarajpr/LQGE2/ (from http://stackoverflow.com/questions/12050268/angularjs-make-a-simple-countdown#answer-12050481)
       $scope.onTick = function() {
         $scope.timeLeft--
+        if ($scope.player == 1) {
+          $scope.player1Time++
+        } else {
+          $scope.player2Time++
+        }
         tick = $timeout($scope.onTick, 1000)
       }
 
@@ -40,6 +75,10 @@
         $timeout.cancel(tick)
         tick = $timeout($scope.onTick, 1000)
         $scope.isPaused = false
+      }
+
+      $scope.setPlayer = function(player) {
+        $scope.player = player;
       }
     }
 
@@ -59,6 +98,14 @@
   <div class="actions">
     <button class="btn btn-danger" ng-click="pause()" ng-show="!isPaused">Pause</button>
     <button class="btn btn-success" ng-click="resume()" ng-show="isPaused">Resume</button>
+  </div>
+  <div id="players">
+    <div id="player1" class="player" ng-class="{'active': player==1}" ng-click="setPlayer(1)">
+      {{player1Time|time}}
+    </div>
+    <div id="player2" class="player" ng-class="{'active': player==2}" ng-click="setPlayer(2)">
+      {{player2Time|time}}
+    </div>
   </div>
 </body>
 </html>
