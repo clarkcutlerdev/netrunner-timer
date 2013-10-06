@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html ng-app="netrunnerTimer">
+<head>
+  <meta charset="UTF-8">
+  <title>Netrunner Timer</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700' rel='stylesheet' type='text/css'>
+  <style>
+    #countdown, .actions {
+      text-align: center;
+    }
+
+    #countdown {
+      font-weight: 800;
+      font-size: 100px;
+      margin-bottom: 50px;
+    }
+  </style>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  <script>
+    var netrunnerTimerApp = angular.module('netrunnerTimer', []);
+
+    var TimerController = function ($scope, $timeout) {
+      var tick;
+
+      $scope.timeLeft = 32.5 * 60
+      $scope.isPaused = true
+      // see http://jsfiddle.net/ganarajpr/LQGE2/ (from http://stackoverflow.com/questions/12050268/angularjs-make-a-simple-countdown#answer-12050481)
+      $scope.onTick = function() {
+        $scope.timeLeft--
+        tick = $timeout($scope.onTick, 1000)
+      }
+
+      $scope.pause = function() {
+        $timeout.cancel(tick)
+        $scope.isPaused = true
+      }
+
+      $scope.resume = function() {
+        $timeout.cancel(tick)
+        tick = $timeout($scope.onTick, 1000)
+        $scope.isPaused = false
+      }
+    }
+
+    netrunnerTimerApp.
+      filter('time', function() {
+        return function(input, uppercase) {
+          var minutes = Math.floor(input/60)
+          var seconds = input%60
+          var secondsString = seconds < 10 ? '0' + seconds : seconds
+          return minutes + ':' + secondsString
+        }
+      })
+  </script>
+</head>
+<body ng-controller="TimerController">
+  <div id="countdown">{{timeLeft|time}}</div>
+  <div class="actions">
+    <button class="btn btn-danger" ng-click="pause()" ng-show="!isPaused">Pause</button>
+    <button class="btn btn-success" ng-click="resume()" ng-show="isPaused">Resume</button>
+  </div>
+</body>
+</html>
