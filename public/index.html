@@ -81,6 +81,10 @@
       $scope.setPlayer = function(player) {
         $scope.player = player;
       }
+
+      $scope.togglePlayer = function() {
+        $scope.player = $scope.player === 1 ? 2 : 1;
+      }
     }
 
     netrunnerTimerApp.
@@ -92,6 +96,16 @@
           return minutes + ':' + secondsString
         }
       })
+
+    document.addEventListener('keyup', function(e) {
+      switch(e.which) {
+        case 32: // space
+          var scope = angular.element(document.querySelector('[ng-controller="TimerController"]')).scope()
+          scope.togglePlayer()
+          scope.$apply()
+          break;
+      }
+    });
   </script>
 </head>
 <body ng-controller="TimerController">
