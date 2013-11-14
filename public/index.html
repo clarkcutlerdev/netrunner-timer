@@ -51,14 +51,14 @@
     var TimerController = function ($scope, $timeout) {
       var tick;
 
-      $scope.timeLeft = 32.5 * 60
+      $scope.secondsLeft = 32.5 * 60
       $scope.isPaused = true
       $scope.player = 1
       $scope.player1Time = 0
       $scope.player2Time = 0
       // see http://jsfiddle.net/ganarajpr/LQGE2/ (from http://stackoverflow.com/questions/12050268/angularjs-make-a-simple-countdown#answer-12050481)
       $scope.onTick = function() {
-        $scope.timeLeft--
+        $scope.secondsLeft--
         if ($scope.player == 1) {
           $scope.player1Time++
         } else {
@@ -109,7 +109,7 @@
   </script>
 </head>
 <body ng-controller="TimerController">
-  <div id="countdown">{{timeLeft|time}}</div>
+  <div id="countdown">{{secondsLeft|time}}</div>
   <div class="actions">
     <button class="btn btn-danger" ng-click="pause()" ng-show="!isPaused">Pause</button>
     <button class="btn btn-success" ng-click="resume()" ng-show="isPaused">Resume</button>
